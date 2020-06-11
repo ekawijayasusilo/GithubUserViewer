@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.githubuserviewer"
         minSdkVersion 21
@@ -21,8 +21,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     viewBinding {
         enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -38,7 +48,11 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpLoggingInterceptorVersion"
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitAdapterRxJavaVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitConverterGsonVersion"
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"

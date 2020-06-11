@@ -13,18 +13,21 @@ buildscript {
         materialVersion = '1.1.0'
 
         rxJavaVersion = '2.2.19'
+        rxAndroidVersion = '2.1.1'
+        okHttpLoggingInterceptorVersion = '3.14.4'
         retrofitVersion = '2.9.0'
+        retrofitAdapterRxJavaVersion = '2.9.0'
+        retrofitConverterGsonVersion = '2.9.0'
         gsonVersion = '2.8.6'
         glideVersion = '4.11.0'
 
-        jUnitVersion = '4.12'
+        jUnitVersion = '4.13'
         testExtJUnitVersion = '1.1.1'
         espressoVersion = '3.2.0'
     }
     repositories {
         google()
         jcenter()
-
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"

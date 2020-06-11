@@ -20,7 +20,7 @@ class SearchUserPresenter(
     private var tempSearchTerm = ""
     private var nextPage = 1
 
-    private var users = mutableListOf<User>()
+    private var users = listOf<User>()
     private var isLoadingNextPage = false
     private var isNextPageAvailable = true
 
@@ -47,7 +47,7 @@ class SearchUserPresenter(
 
     private val onSuccessNextPage: (List<UserEntity>) -> Unit = { users ->
         this.nextPage++
-        this.users.addAll(users.map { User.from(it) }.toMutableList())
+        this.users = this.users + users.map { User.from(it) }
         this.isLoadingNextPage = false
 
         view?.onSetNextPageResult(this.users)

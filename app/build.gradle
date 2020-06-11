@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", '"https://api.github.com"'
     }
     buildTypes {
         release {
@@ -54,6 +55,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitAdapterRxJavaVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitConverterGsonVersion"
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation "org.koin:koin-android:$rootProject.koinVersion"
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 

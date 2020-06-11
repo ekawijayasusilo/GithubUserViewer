@@ -30,7 +30,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linear_layout_load_next_page"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_search_user"
         tools:listitem="@layout/item_user"
         tools:visibility="visible" />
@@ -45,5 +45,31 @@
         app:layout_constraintStart_toStartOf="@id/recycler_view_user"
         app:layout_constraintTop_toTopOf="@id/recycler_view_user"
         tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_load_next_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/load_next_page"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

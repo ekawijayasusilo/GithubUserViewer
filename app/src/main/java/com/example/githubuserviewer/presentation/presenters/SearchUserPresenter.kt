@@ -13,6 +13,7 @@ class SearchUserPresenter(
     private var tempSearchTerm = ""
     private var nextPage = 1
     private var users = mutableListOf<User>()
+    private var isLoadingNextPage = false
 
     private val onSuccessSearch: (List<UserEntity>) -> Unit = { users ->
         this.searchTerm = this.tempSearchTerm
@@ -20,6 +21,13 @@ class SearchUserPresenter(
         this.users = users.map { User.from(it) }.toMutableList()
 
         view?.onSetSearchResult(this.users)
+    }
+    private val onSuccessNextPage: (List<UserEntity>) -> Unit = { users ->
+        this.nextPage++
+        this.users.addAll(users.map { User.from(it) }.toMutableList())
+        this.isLoadingNextPage = false
+
+        view?.onSetNextPageResult(users.map { User.from(it) })
     }
     private val onError: (Throwable) -> Unit = { error ->
         view?.onSetErrorResult(error.message ?: "")
@@ -44,6 +52,11 @@ class SearchUserPresenter(
     }
 
     override fun loadNextPage() {
-        TODO("Not yet implemented")
+        if (!isLoadingNextPage) {
+            isLoadingNextPage = true
+
+            view?.onLoadingNextPageResult()
+            getUsers(this.searchTerm, this.nextPage, this.onSuccessNextPage, this.onError)
+        }
     }
 }

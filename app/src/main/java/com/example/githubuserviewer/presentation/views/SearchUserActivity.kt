@@ -13,6 +13,7 @@ import com.example.githubuserviewer.presentation.adapters.UserAdapter
 import com.example.githubuserviewer.presentation.models.User
 import com.example.githubuserviewer.presentation.presenters.SearchUserContract
 import com.example.githubuserviewer.presentation.presenters.SearchUserPresenter
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -84,16 +85,18 @@ class SearchUserActivity : AppCompatActivity(), SearchUserContract.View,
     }
 
     override fun onLoadingNextPageResult() {
-        TODO("Not yet implemented")
+        binding.linearLayoutLoadNextPage.visibility = View.VISIBLE
     }
 
     override fun onSetNextPageResult(users: List<User>) {
-        TODO("Not yet implemented")
+        adapter.updateList(users)
+        binding.linearLayoutLoadNextPage.visibility = View.GONE
     }
 
     override fun onSetErrorResult(message: String) {
         binding.recyclerViewUser.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
+        binding.linearLayoutLoadNextPage.visibility = View.GONE
         binding.textInputLayoutSearchUser.isEnabled = true
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
             .show()

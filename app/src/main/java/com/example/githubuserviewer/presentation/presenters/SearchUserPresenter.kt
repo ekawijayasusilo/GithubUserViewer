@@ -3,6 +3,7 @@ package com.example.githubuserviewer.presentation.presenters
 import com.example.githubuserviewer.domain.model.UserEntity
 import com.example.githubuserviewer.domain.usecase.GetUsersUseCase
 import com.example.githubuserviewer.presentation.models.User
+import com.example.githubuserviewer.utils.NotContinuableException
 
 class SearchUserPresenter(
     private var view: SearchUserContract.View?,
@@ -12,8 +13,10 @@ class SearchUserPresenter(
     private var searchTerm = ""
     private var tempSearchTerm = ""
     private var nextPage = 1
+
     private var users = mutableListOf<User>()
     private var isLoadingNextPage = false
+    private var isNextPageAvailable = true
 
     private val onSuccessSearch: (List<UserEntity>) -> Unit = { users ->
         this.searchTerm = this.tempSearchTerm
@@ -22,6 +25,7 @@ class SearchUserPresenter(
 
         view?.onSetSearchResult(this.users)
     }
+
     private val onSuccessNextPage: (List<UserEntity>) -> Unit = { users ->
         this.nextPage++
         this.users.addAll(users.map { User.from(it) }.toMutableList())
@@ -29,7 +33,11 @@ class SearchUserPresenter(
 
         view?.onSetNextPageResult(users.map { User.from(it) })
     }
+
     private val onError: (Throwable) -> Unit = { error ->
+        if (error is NotContinuableException) {
+            isNextPageAvailable = false
+        }
         view?.onSetErrorResult(error.message ?: "")
     }
 
@@ -52,11 +60,11 @@ class SearchUserPresenter(
     }
 
     override fun loadNextPage() {
-        if (!isLoadingNextPage) {
+        if (!isLoadingNextPage && isNextPageAvailable) {
             isLoadingNextPage = true
 
             view?.onLoadingNextPageResult()
-            getUsers(this.searchTerm, this.nextPage, this.onSuccessNextPage, this.onError)
+            getUsers(searchTerm, nextPage, onSuccessNextPage, onError)
         }
     }
 }

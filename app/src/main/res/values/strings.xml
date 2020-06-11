@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Github User Viewer</string>
+    <string name="search_hint">Search for Github Username…</string>
     <string name="load_next_page">Loading…</string>
 </resources>

@@ -4,6 +4,12 @@ import com.example.githubuserviewer.domain.model.UserEntity
 import com.example.githubuserviewer.domain.usecase.GetUsersUseCase
 import com.example.githubuserviewer.presentation.models.User
 import com.example.githubuserviewer.utils.NotContinuableException
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
+
 
 class SearchUserPresenter(
     private var view: SearchUserContract.View?,
@@ -18,6 +24,19 @@ class SearchUserPresenter(
     private var isLoadingNextPage = false
     private var isNextPageAvailable = true
 
+    private val autoSearch = PublishSubject.create<String>()
+    private var disposable: Disposable? = null
+    private val onLoadSearch: (String) -> Unit = { searchTerm ->
+        this.searchTerm = ""
+        this.tempSearchTerm = searchTerm
+        this.nextPage = 1
+        this.isNextPageAvailable = true
+
+        view?.onLoadingSearchResult()
+        getUsers.cancel()
+        getUsers(searchTerm, this.nextPage, this.onSuccessSearch, this.onError)
+    }
+
     private val onSuccessSearch: (List<UserEntity>) -> Unit = { users ->
         this.searchTerm = this.tempSearchTerm
         this.nextPage++
@@ -31,7 +50,7 @@ class SearchUserPresenter(
         this.users.addAll(users.map { User.from(it) }.toMutableList())
         this.isLoadingNextPage = false
 
-        view?.onSetNextPageResult(users.map { User.from(it) })
+        view?.onSetNextPageResult(this.users)
     }
 
     private val onError: (Throwable) -> Unit = { error ->
@@ -43,6 +62,7 @@ class SearchUserPresenter(
 
     override fun attach() {
         view?.onInitUI()
+        initAutoSearch()
     }
 
     override fun detach() {
@@ -50,14 +70,7 @@ class SearchUserPresenter(
         view = null
     }
 
-    override fun loadSearch(searchTerm: String) {
-        this.searchTerm = ""
-        this.tempSearchTerm = searchTerm
-        this.nextPage = 1
-
-        view?.onLoadingSearchResult()
-        getUsers(searchTerm, this.nextPage, this.onSuccessSearch, this.onError)
-    }
+    override fun loadSearch(searchTerm: String) = autoSearch.onNext(searchTerm)
 
     override fun loadNextPage() {
         if (!isLoadingNextPage && isNextPageAvailable) {
@@ -66,5 +79,13 @@ class SearchUserPresenter(
             view?.onLoadingNextPageResult()
             getUsers(searchTerm, nextPage, onSuccessNextPage, onError)
         }
+    }
+
+    private fun initAutoSearch() {
+        disposable = autoSearch.debounce(500, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(onLoadSearch)
     }
 }

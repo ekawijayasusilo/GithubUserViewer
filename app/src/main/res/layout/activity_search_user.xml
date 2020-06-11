@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context=".presentation.views.SearchUserActivity">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout_search_user"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/ic_baseline_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_search_user"
+            android:id="@+id/text_input_edit_text_search_user"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -23,12 +25,25 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_user"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_user" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_input_layout_search_user"
+        tools:listitem="@layout/item_user"
+        tools:visibility="visible" />
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/recycler_view_user"
+        app:layout_constraintEnd_toEndOf="@id/recycler_view_user"
+        app:layout_constraintStart_toStartOf="@id/recycler_view_user"
+        app:layout_constraintTop_toTopOf="@id/recycler_view_user"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

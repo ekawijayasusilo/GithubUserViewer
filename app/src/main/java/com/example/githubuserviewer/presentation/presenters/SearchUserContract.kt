@@ -7,9 +7,15 @@ interface SearchUserContract {
     interface View {
         fun onInitUI()
 
+        fun onLoadingSearchResult()
+
         fun onSetSearchResult(users: List<User>)
 
-        fun onLoadNextPage(users: List<User>)
+        fun onLoadingNextPageResult()
+
+        fun onSetNextPageResult(users: List<User>)
+
+        fun onSetErrorResult(message: String)
     }
 
     interface Presenter {
@@ -17,7 +23,7 @@ interface SearchUserContract {
 
         fun detach()
 
-        fun updateSearchTerm(searchTerm: String)
+        fun loadSearch(searchTerm: String)
 
         fun loadNextPage()
     }

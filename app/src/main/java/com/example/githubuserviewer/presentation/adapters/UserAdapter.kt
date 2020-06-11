@@ -16,7 +16,7 @@ class UserAdapter(private var listener: UserAdapterListener?) :
 
     private val diffCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem.name == newItem.name
+            oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem
     }
@@ -49,12 +49,12 @@ class UserAdapter(private var listener: UserAdapterListener?) :
         fun bind(user: User) {
             binding.textViewName.text = user.name
             Glide.with(itemView)
-                .load(user.profileUrl)
+                .load(user.avatarUrl)
                 .centerCrop()
                 .placeholder(R.drawable.ic_baseline_image_24)
                 .error(R.drawable.ic_baseline_broken_image_24)
                 .fallback(R.drawable.ic_baseline_image_24)
-                .into(binding.imageViewProfile)
+                .into(binding.imageViewAvatar)
         }
     }
 
